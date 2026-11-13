@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mero Desocupe · Música y juegos</title>
+<style>
+:root{color-scheme:dark;box-sizing:border-box;--bg:#0b0b0d;--side:#121214;--card:#18181b;--card2:#202024;--text:#ececf1;--muted:#8d8d99;--line:#2a2a30;--acc:#1db954;--acc2:#7c6cf0;--bar:#111113f2}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+header{padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:var(--side);border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header b{font-size:1.15rem;letter-spacing:.4px}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+nav button{background:none;border:0;color:var(--muted);padding:7px 13px;border-radius:8px;font:inherit;cursor:pointer}
+nav button:hover{color:var(--text)}
+nav button.on{background:var(--card2);color:var(--text)}
+#view{flex:1;overflow:auto;padding:16px 14px 24px}
+section{display:none;max-width:980px;margin:0 auto}
+section.on{display:block}
+h2{margin:22px 0 10px;font-size:1.05rem;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
+textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);color:var(--text);font:inherit}
+textarea{min-height:64px;resize:vertical}
+.b{background:var(--acc);color:#04210f;font-weight:600;border:0;border-radius:99px;padding:7px 16px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.g{background:none;color:var(--text);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+.g:hover{border-color:var(--muted)}
+.g.on{background:var(--text);color:#111;border-color:var(--text)}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap}
+.meta{color:var(--muted);font-size:.82rem}
+.txt{white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.av{width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex:none}
+.ph{display:flex;gap:10px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.emb{width:100%;border:0;border-radius:12px;background:var(--card)}
+.cov{aspect-ratio:3/4;border-radius:10px;background:var(--card2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line);text-align:center;padding:10px}
+.cov img{width:100%;height:100%;object-fit:cover;display:block}
+.cov big{font-size:2.6rem;line-height:1;opacity:.8}
+.gtitle{font-weight:700;margin-bottom:6px}
+iframe.game{width:100%;height:min(64vh,580px);border:1px solid var(--line);border-radius:12px;background:#000;margin-top:6px}
+#gplay{display:none;margin-top:16px}
+#player{border-top:1px solid var(--line);background:var(--bar);backdrop-filter:blur(10px);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#player .t{flex:1;min-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+#seek{flex:2;min-width:100px;accent-color:var(--acc)}
+#spo{position:fixed;inset:0;background:#000c;display:none;align-items:flex-end;justify-content:center;z-index:19;padding:16px}
+#spo.on{display:flex}
+#spo .box{background:var(--card);border-radius:14px;padding:16px;max-height:80vh;overflow:auto;border:1px solid var(--line)}
+#ov{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+#ov.on{display:flex}
+#ov .box{background:var(--card);border-radius:14px;padding:16px;width:min(440px,100%);max-height:82vh;overflow:auto;border:1px solid var(--line)}
+.tr{padding:8px 10px;border-radius:8px;cursor:pointer}
+.tr:hover{background:var(--card2)}
+.tr.on{background:var(--acc);color:#04210f;font-weight:600}
+#msg{color:var(--muted);text-align:center;padding:16px}
+</style>
+</head>
+<body>
+<header><b>🎧 Mero Desocupe</b>
+<nav><button data-t="mus" class="on">Música</button><button data-t="games">Juegos</button></nav></header>
+<div id="view">
+
+<section id="mus" class="on">
+<div class="chips"><button class="g on" id="tg">🌎 Global</button><button class="g" id="tp">📍 Top 50 por país</button></div>
+<div id="vg">
+<h2>🔥 Top 50 Global</h2>
+<iframe class="emb" id="plf" height="420" loading="lazy" title="Top 50 Global" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<h2>🎤 Artistas más escuchados del mundo</h2>
+<div class="grid" id="arts"></div>
+</div>
+<div id="vp" style="display:none">
+<div class="chips" id="cchips"></div>
+<h2 id="ctitle"></h2>
+<iframe class="emb" id="cf" height="480" title="Top 50 del país" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+<div class="meta" id="cnote"></div>
+<a class="g" id="clink" target="_blank" rel="noopener noreferrer" style="margin-top:8px"></a>
+</div>
+<p class="meta">Reproductor oficial de Spotify dentro de la página. Sin iniciar sesión suenan fragmentos de 30 segundos; con tu sesión de Spotify abierta en este navegador suenan completas.</p>
+<h2>📁 Mi biblioteca (archivos locales)</h2>
+<div class="card"><div id="lib" class="meta"></div>
+<div class="row"><label class="b" style="cursor:pointer">＋ Agregar archivos<input type="file" class="fin" accept="audio/*" multiple hidden></label></div></div>
+</section>
+
+<section id="com" aria-hidden="true" style="display:none!important">
+<div id="cview">
+<div class="card"><input type="text" id="cn" maxlength="30" placeholder="Nombre de la nueva comunidad">
+<div class="row"><span class="meta">Crea un espacio para debatir un tema.</span><button class="b" id="cc">Crear</button></div></div>
+<div id="clist"></div>
+<div class="card" id="dc"><b>💬 Discord</b>
+<div class="meta" id="dcn" style="margin:6px 0"></div>
+<div id="dccfg" style="display:none;margin-bottom:10px">
+<div class="row" style="margin:0 0 6px"><input type="text" id="dcs" placeholder="ID del servidor" style="flex:1;min-width:140px"><input type="text" id="dcc" placeholder="ID del canal (opcional, para chat)" style="flex:1;min-width:140px"><button class="b" id="dcb">Guardar</button></div>
+<div class="meta">Sin ID de canal se muestra el widget de Discord (miembros conectados y botón para unirse). Con ID de canal se muestra el chat completo, pero el dueño del servidor debe añadir el bot de WidgetBot (widgetbot.io) y activar el widget en Ajustes del servidor. Los IDs se copian con clic derecho en modo desarrollador de Discord.</div></div>
+<iframe id="dcf" class="emb" height="520" style="display:none" title="Discord" allow="clipboard-write; fullscreen"></iframe>
+<a class="g" href="https://discord.com/app" target="_blank" rel="noopener noreferrer" style="margin-top:8px">Abrir Discord ↗</a></div>
+</div>
+<div id="thread" style="display:none">
+<div class="row" style="margin:0 0 10px"><button class="g" id="back">← Comunidades</button><b id="tname"></b></div>
+<div class="card"><textarea id="t" maxlength="500" placeholder="Escribe tu opinión…"></textarea>
+<div class="row"><span class="meta">Se publica en esta comunidad</span><button class="b" id="send">Publicar</button></div></div>
+<div id="msg">Cargando…</div><div id="posts"></div>
+</div>
+</section>
+
+<section id="games">
+<input type="text" id="gq" placeholder="🔍 Buscar juego…" style="margin-bottom:12px">
+<div class="ggrid" id="glist"></div>
+<div id="gplay"><div class="row"><b id="gname"></b><button class="g" id="gclose">✕ Cerrar</button></div><iframe class="game" id="gf" title="Juego" allow="fullscreen; gamepad; autoplay; clipboard-write" allowfullscreen></iframe></div>
+<p class="meta">Atajo: Shift + Tab abre el control de música local. Si el juego tiene el foco, haz clic fuera de él primero.</p>
+<button class="g" id="gmusic">🎵 Música</button>
+</section>
+</div>
+
+<div id="player">
+<button class="g" id="pp" title="Anterior">⏮</button><button class="b" id="pl">▶</button><button class="g" id="nx" title="Siguiente">⏭</button>
+<div class="t" id="tt">Sin música local · agrega archivos</div>
+<input type="range" id="seek" min="0" max="1000" value="0">
+<button class="b" id="spb">🟢 Spotify / YT</button><label class="g" style="cursor:pointer">＋<input type="file" class="fin" accept="audio/*" multiple hidden></label>
+</div>
+
+<div id="ov"><div class="box">
+<div class="row" style="margin:0 0 8px"><b>Lista de reproducción</b><button class="g" id="cl">✕</button></div>
+<div class="row" style="justify-content:center;margin:0 0 10px"><button class="g" id="b10">⏪ 10s</button><button class="g" id="op">⏮</button><button class="b" id="ol">▶</button><button class="g" id="on">⏭</button><button class="g" id="f10">10s ⏩</button></div>
+<div id="tl"></div>
+<div class="row"><label class="g" style="cursor:pointer">＋ Archivos locales<input type="file" class="fin" accept="audio/*" multiple hidden></label></div>
+</div></div>
+
+<div id="spo" class="ovl"><div class="box" style="width:min(560px,100%)">
+<div class="row" style="margin:0 0 10px"><b>🟢 Spotify y ▶ YT Music</b><button class="g" id="spx">✕</button></div>
+<div class="row" style="margin:0 0 8px"><input type="text" id="spq" placeholder="Buscar canciones, artistas…" style="flex:1;min-width:160px"><button class="b" id="sps">Spotify</button><button class="g" id="yts">YT Music</button></div>
+<div class="row" style="justify-content:flex-start;margin:0 0 10px"><button class="g" id="spl">Iniciar sesión en Spotify ↗</button><button class="g" id="spw">Abrir Spotify ↗</button><button class="g" id="ytl">Iniciar sesión en Google ↗</button></div>
+<p class="meta" style="margin:0 0 10px">Spotify y YT Music no permiten abrir su buscador ni tu cuenta dentro de otra página, así que la búsqueda y el inicio de sesión se abren en una pestaña nueva. Desde ahí copia el enlace de una canción, álbum o playlist pública (Spotify, YouTube o YT Music), pégalo aquí y se reproduce dentro de Nexo. Si ya iniciaste sesión en ese navegador, suena completo. Algunos videos de YouTube no permiten ser incrustados.</p>
+<div class="row" style="margin:0 0 10px"><input type="text" id="spu" placeholder="Pega un enlace de Spotify, YouTube o YT Music" style="flex:1;min-width:160px"><button class="b" id="spa">Agregar</button></div>
+<div id="splist"></div>
+</div></div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var db=null,user=null,assets=null,me=null,comm='',comms=[],postsSnap=null,covers={
+'mario':'imagenes/MV5BY2QzZTVhYjctZWMyNy00MDlhLThhYTktZDg2M2EwNTE3ZDZkXkEyXkFqcGc@.*V1_FMjpg_UX1000*.jpg',
+'shar':'imagenes/images.jpeg',
+'skate':'imagenes/skate-3-key-art.jpg.adapt.crop3x5.533p.jpg',
+'re':'imagenes/Re_outbreak_a.jpg',
+'gh3':'imagenes/MV5BYWRiY2ZmYmYtODNjZi00MTE5LWI4NGMtNTBkNDIzNTI1Y2M2XkEyXkFqcGc@.*V1*.jpg',
+'gta3':'imagenes/images (1).jpeg',
+'vc':'imagenes/167638.png',
+'nfs':'imagenes/MV5BYzZlMjBjYjItMzUzOC00YTJlLThiNWQtNjViZjc1MTA2ZGE1XkEyXkFqcGc@.*V1_QL75_UX190_CR0,2,190,281*.jpg',
+'pes6':'imagenes/images (2).jpeg',
+'pes13':'imagenes/MV5BYzlmZmUyMzEtYjY1Yy00MjJiLTkzMjctM2JhNzVmYTlhNjJhXkEyXkFqcGc@.*V1_FMjpg_UX1000*.jpg'
+};
+function hue(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%360;return h}
+function avatar(s){var a=document.createElement('span');a.className='av';a.style.background='hsl('+hue(s)+',35%,38%)';a.textContent=(s||'?').charAt(0).toUpperCase();return a}
+
+/* pestañas */
+function go(t){document.querySelectorAll('nav button,section').forEach(function(e){e.classList.remove('on')});
+document.querySelector('nav [data-t='+t+']').classList.add('on');$(t).classList.add('on');}
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){go(b.dataset.t)}});
+
+/* Spotify embebido */
+var artists=[['Bruno Mars','0du5cEVh5yTK9QJze8zA0C'],['Justin Bieber','1uNFoZAHBGtllmzznpCI3s'],['The Weeknd','1Xyo4u8uXC1ZmMpatF05PJ'],['Rihanna','5pKCCKE2ajJHZ9KAiaK11H'],['Taylor Swift','06HL4z0CvFAxyc27GXpf02'],['Bad Bunny','4q3ewBCX7sLwd24euuV69X'],['Shakira','0EmeFodog0BfCgMzAIvKQp'],['Billie Eilish','6qqNVTkY8uBg9cP3Jd7DAH'],['Karol G','790FomKkXshlbRYZFtlgla'],['Feid','2LRoIwlKmHjgvigdNGBHNo'],['Coldplay','4gzpq5DPGxSnKTe4SA8HAU'],['Peso Pluma','12GqGscKJx3aE4t07u7eVZ']];
+var countries=[['México','37i9dQZEVXbO3qyFxbkOE1'],['Colombia','37i9dQZEVXbOa2lmxNORXQ'],['Argentina','37i9dQZEVXbMMy2roB9myp'],['Chile','37i9dQZEVXbL0GavIqMTeb'],['Perú','37i9dQZEVXbJfdy5b0KP7W'],['Brasil','37i9dQZEVXbMXbN3EUUhlg'],['Bolivia','37i9dQZEVXbJqfMFK4d691'],['Uruguay',''],['Ecuador','37i9dQZEVXbJlM6nvL1nD1'],['Paraguay','37i9dQZEVXbNOUPGj7tW6T'],['Venezuela',''],['Costa Rica','37i9dQZEVXbMZAjGMynsQX'],['Panamá','37i9dQZEVXbKypXHVwk1f0'],['Guatemala','37i9dQZEVXbLy5tBFyQvd4'],['Honduras','37i9dQZEVXbJp9wcIM9Eo5'],['El Salvador','37i9dQZEVXbLxoIml4MYkT'],['Nicaragua','37i9dQZEVXbISk8kxnzfCq'],['República Dominicana','37i9dQZEVXbKAbrMR8uuf7']];
+var AL='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+function emb(kind,id){return 'https://open.spotify.com/embed/'+kind+'/'+id+'?utm_source=generator&theme=0'}
+function showCountry(i){var c=countries[i];
+$('cchips').querySelectorAll('button').forEach(function(x,k){x.classList.toggle('on',k===i)});
+$('ctitle').textContent='Top 50 · '+c[0];
+var q='https://open.spotify.com/search/'+encodeURIComponent('Top 50 '+c[0]);
+$('clink').href=q;$('clink').textContent='Abrir Top 50 '+c[0]+' en Spotify ↗';
+if(c[1]){$('cf').style.display='block';$('cf').src=emb('playlist',c[1]);$('cnote').textContent=''}
+else{$('cf').style.display='none';$('cf').src='about:blank';$('cnote').textContent='Aún no tengo verificado el código de esta lista. Usa el enlace para abrirla en Spotify.'}}
+function loadMusic(){
+$('plf').src=emb('playlist','37i9dQZEVXbMDoHDwVN2tF');
+artists.forEach(function(a){var f=document.createElement('iframe');f.className='emb';f.height='152';f.loading='lazy';f.title=a[0];f.allow=AL;f.src=emb('artist',a[1]);$('arts').appendChild(f)});
+countries.forEach(function(c,i){var b=document.createElement('button');b.className='g';b.textContent=c[0];b.onclick=function(){showCountry(i)};$('cchips').appendChild(b)});
+showCountry(0);
+$('tg').onclick=function(){$('vg').style.display='block';$('vp').style.display='none';$('tg').classList.add('on');$('tp').classList.remove('on')};
+$('tp').onclick=function(){$('vg').style.display='none';$('vp').style.display='block';$('tp').classList.add('on');$('tg').classList.remove('on')}}
+
+/* música local */
+var au=new Audio(),pl=[],cur=-1;
+function ui(){
+$('pl').textContent=$('ol').textContent=au.paused?'▶':'⏸';
+$('tt').textContent=cur>=0?pl[cur].name:'Sin música local · agrega archivos';
+['tl','lib'].forEach(function(id){var l=$(id);l.textContent='';
+if(!pl.length){l.textContent='Aún no hay canciones. Agrega archivos de audio de tu equipo.';return}
+pl.forEach(function(s,i){var d=document.createElement('div');d.className='tr'+(i===cur?' on':'');d.textContent=(i+1)+'. '+s.name;d.onclick=function(){play(i)};l.appendChild(d)})})}
+function play(i){if(!pl.length)return;cur=(i+pl.length)%pl.length;au.src=pl[cur].url;au.play().catch(function(){});ui()}
+function toggle(){if(cur<0){play(0);return}au.paused?au.play():au.pause()}
+function add(files){[].slice.call(files).forEach(function(x){pl.push({name:x.name.replace(/\.[^.]+$/,''),url:URL.createObjectURL(x)})});if(cur<0&&pl.length)play(0);else ui()}
+document.querySelectorAll('.fin').forEach(function(f){f.onchange=function(e){add(e.target.files);e.target.value=''}});
+$('pl').onclick=$('ol').onclick=toggle;
+$('nx').onclick=$('on').onclick=function(){play(cur+1)};
+$('pp').onclick=$('op').onclick=function(){play(cur-1)};
+$('b10').onclick=function(){au.currentTime=Math.max(0,au.currentTime-10)};
+$('f10').onclick=function(){au.currentTime=Math.min(au.duration||0,au.currentTime+10)};
+au.onplay=au.onpause=ui;au.onended=function(){play(cur+1)};
+au.ontimeupdate=function(){if(au.duration)$('seek').value=au.currentTime/au.duration*1000};
+$('seek').oninput=function(){if(au.duration)au.currentTime=$('seek').value/1000*au.duration};
+function ov(s){$('ov').classList.toggle('on',s)}
+$('cl').onclick=function(){ov(false)};$('gmusic').onclick=function(){ov(true)};
+$('ov').onclick=function(e){if(e.target===$('ov'))ov(false)};
+document.addEventListener('keydown',function(e){
+if(e.shiftKey&&e.key==='Tab'){e.preventDefault();ov(!$('ov').classList.contains('on'))}else if(e.key==='Escape')ov(false)},true);
+
+/* juegos */
+var games=[
+{k:'mario',n:'Super Mario 64',u:'https://notan127.github.io/SM64-PC-Port-WebGL/',e:'⭐',w:true},
+{k:'shar',n:'The Simpsons: Hit & Run',u:'https://shar-wasm.cjoseph.workers.dev/?skipmovie=',e:'🍩',w:false,note:'Necesita funciones del navegador (SharedArrayBuffer) que solo existen en su propia pestaña, por eso se abre aparte.'},
+{k:'skate',n:'Skate 3',u:'https://skate.aaddpp.lol/',e:'🛹',w:true},
+{k:'re',n:'Resident Evil Outbreak',u:'https://outbreakweb.com/file2/',e:'🧟',w:false,note:'Este sitio no permite abrirse dentro de otra página, por eso se abre en su propia pestaña.'},
+{k:'gh3',n:'Guitar Hero III',u:'https://gh3.thediaryofchris.net/index.html',e:'🎸',w:true},
+{k:'gta3',n:'GTA III',u:'https://quenq.com/apps/gta-3/',e:'🚗',w:false,note:'Este sitio no permite abrirse dentro de otra página, por eso se abre en su propia pestaña.'},
+{k:'vc',n:'GTA Vice City',u:'https://quenq.com/apps/vice-city/',e:'🌴',w:false,note:'Este sitio no permite abrirse dentro de otra página, por eso se abre en su propia pestaña.'},
+{k:'nfs',n:'Need for Speed Most Wanted',u:'https://web.nfsmwo.com/',e:'🏎️',w:true},
+{k:'m64o',n:'Super Mario 64 Online',u:'https://olivers.tools/?play',e:'🌐',w:true},
+{k:'pes6',n:'PES 6',u:'https://pes6.optijuegos.net/',e:'⚽',w:true},
+{k:'pes13',n:'PES 13',u:'https://pes13.optijuegos.net/',e:'⚽',w:true},
+{k:'pp',n:'Papa’s Pizzeria',v:[['Poki','https://poki.com/es/g/papas-pizzeria'],['papaspizzeria.io','https://papaspizzeria.io/papas-pizzeria.embed','https://papaspizzeria.io/papas-pizzeria']],e:'🍕',w:true,note:'Dos versiones. La de papaspizzeria.io carga el juego solo; si una no carga aquí, usa la otra o la pestaña nueva.'},
+{k:'pch',n:'Papa’s Cheeseria',u:'https://papaspizzeria.io/papas-cheeseria.embed',tab:'https://papaspizzeria.io/papas-cheeseria',e:'🧀',w:true},
+{k:'pbu',n:'Papa’s Burgeria',u:'https://papaspizzeria.io/papas-burgeria.embed',tab:'https://papaspizzeria.io/papas-burgeria',e:'🍔',w:true},
+{k:'pwi',n:'Papa’s Wingeria',u:'https://papaspizzeria.io/papas-wingeria.embed',tab:'https://papaspizzeria.io/papas-wingeria',e:'🍗',w:true},
+{k:'pdo',n:'Papa’s Hot Doggeria',u:'https://papaspizzeria.io/papas-hot-doggeria.embed',tab:'https://papaspizzeria.io/papas-hot-doggeria',e:'🌭',w:true},
+{k:'pfr',n:'Papa’s Freezeria',u:'https://papaspizzeria.io/papas-freezeria.embed',tab:'https://papaspizzeria.io/papas-freezeria',e:'🍦',w:true}];
+function norm(x){return String(x).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f’']/g,'')}
+function drawGames(){var host=$('glist');host.textContent='';
+var q=norm($('gq').value.trim()),list=games.filter(function(g){return !q||norm(g.n).indexOf(q)>=0});
+if(!list.length){var em=document.createElement('div');em.className='meta';em.textContent='No hay juegos con ese nombre.';host.appendChild(em);return}
+list.forEach(function(g){
+var c=document.createElement('div');c.className='card';
+var cv=document.createElement('div');cv.className='cov';
+if(covers[g.k]){var im=document.createElement('img');im.alt=g.n;im.src=covers[g.k];im.onerror=function(){cv.removeChild(im);cv.style.background='linear-gradient(160deg,hsl('+hue(g.n)+',45%,34%),hsl('+((hue(g.n)+40)%360)+',50%,15%))';var big=document.createElement('big');big.textContent=g.e;big.style.opacity='1';var sp=document.createElement('b');sp.style.cssText='font-size:1.05rem;padding:0 6px';sp.textContent=g.n;cv.appendChild(big);cv.appendChild(sp)};cv.appendChild(im)}
+else{var h=hue(g.n);cv.style.background='linear-gradient(160deg,hsl('+h+',45%,34%),hsl('+((h+40)%360)+',50%,15%))';var big=document.createElement('big');big.textContent=g.e;big.style.opacity='1';var sp=document.createElement('b');sp.style.cssText='font-size:1.05rem;padding:0 6px';sp.textContent=g.n;cv.appendChild(big);cv.appendChild(sp)}
+var t=document.createElement('div');t.className='gtitle';t.textContent=g.n;
+var r=document.createElement('div');r.className='chips';
+(g.v||[[null,g.u]]).forEach(function(v){var lb=v[0]?' ('+v[0]+')':'';
+if(g.w){var p=document.createElement('button');p.className='b';p.textContent='▶ Jugar aquí'+lb;p.onclick=function(){$('gname').textContent=g.n+lb;$('gf').src=v[1];$('gplay').style.display='block';$('gplay').scrollIntoView({behavior:'smooth'})};r.appendChild(p)}
+var o=document.createElement('a');o.className=g.w?'g':'b';o.href=v[2]||g.tab||v[1];o.target='_blank';o.rel='noopener noreferrer';o.textContent=(g.w?'↗ Pestaña nueva':'▶ Jugar (pestaña nueva)')+lb;r.appendChild(o)});
+c.appendChild(cv);c.appendChild(t);c.appendChild(r);
+if(assets&&db){var l=document.createElement('label');l.className='meta';l.style.cursor='pointer';l.textContent='🖼 Subir portada';
+var fi=document.createElement('input');fi.type='file';fi.accept='image/*';fi.hidden=true;
+fi.onchange=async function(){var f=fi.files[0];if(!f)return;try{var res=await assets.upload(f);await db.doc('covers/'+g.k).set({id:res.id})}catch(e){alert('No se pudo subir la imagen.')}};
+l.appendChild(fi);c.appendChild(l)}
+if(g.note){var m=document.createElement('div');m.className='meta';m.textContent=g.note;c.appendChild(m)}
+host.appendChild(c)})}
+$('gq').oninput=drawGames;
+$('gclose').onclick=function(){$('gf').src='about:blank';$('gplay').style.display='none'};
+
+/* feed y comunidades */
+function ago(ts){var s=Math.floor((Date.now()-ts)/1000);if(s<60)return 'hace un momento';if(s<3600)return 'hace '+Math.floor(s/60)+' min';if(s<86400)return 'hace '+Math.floor(s/3600)+' h';return 'hace '+Math.floor(s/86400)+' d'}
+function openComm(k){comm=k.id;$('tname').textContent=k.name;$('cview').style.display='none';$('thread').style.display='block';feed()}
+$('back').onclick=function(){comm='';$('thread').style.display='none';$('cview').style.display='block'};
+function clist(){var l=$('clist');l.textContent='';
+if(!comms.length){var e=document.createElement('div');e.className='meta';e.textContent='Aún no hay comunidades. ¡Crea la primera!';l.appendChild(e);return}
+comms.forEach(function(k){var d=document.createElement('div');d.className='card';var h=document.createElement('div');h.className='ph';
+var w=document.createElement('div');var n=document.createElement('b');n.textContent=k.name;var m=document.createElement('div');m.className='meta';m.textContent='Comunidad';w.appendChild(n);w.appendChild(m);
+h.appendChild(avatar(k.name));h.appendChild(w);
+var b=document.createElement('button');b.className='b';b.textContent='Abrir';b.onclick=function(){openComm(k)};
+var r=document.createElement('div');r.className='row';r.style.margin='0';r.appendChild(h);r.appendChild(b);d.appendChild(r);l.appendChild(d)})}
+async function feed(){
+if(!postsSnap||!comm)return;
+var docs=postsSnap.docs.filter(function(d){return d.data().c===comm});
+$('msg').style.display=docs.length?'none':'block';$('msg').textContent='Aún no hay publicaciones aquí. ¡Escribe la primera!';
+var ids=[];docs.forEach(function(d){var a=d.data().by;if(a&&ids.indexOf(a)<0)ids.push(a)});
+var names={};try{var ps=await user.profiles(ids);ids.forEach(function(i){names[i]=(ps[i]&&ps[i].name)||'Alguien'})}catch(e){}
+var host=$('posts');host.textContent='';
+docs.forEach(function(d){var p=d.data(),lk=Array.isArray(p.likes)?p.likes:[],on=lk.indexOf(me)>=0,nm=names[p.by]||'Alguien';
+var c=document.createElement('div');c.className='card';
+var h=document.createElement('div');h.className='ph';var w=document.createElement('div');var b1=document.createElement('b');b1.textContent=nm;
+var m=document.createElement('div');m.className='meta';m.textContent=ago(p.ts||Date.now());w.appendChild(b1);w.appendChild(m);h.appendChild(avatar(String(p.by||nm)));h.appendChild(w);
+var x=document.createElement('div');x.className='txt';x.textContent=p.text||'';
+var b=document.createElement('button');b.className='g'+(on?' on':'');b.textContent='▲ '+lk.length;
+b.onclick=function(){db.doc('posts/'+d.id).update({likes:on?lk.filter(function(i){return i!==me}):lk.concat([me])}).catch(function(){})};
+c.appendChild(h);c.appendChild(x);c.appendChild(b);host.appendChild(c)})}
+$('send').onclick=async function(){var v=$('t').value.trim();if(!v||!db||!comm)return;
+try{await db.collection('posts').add({text:v,by:me,ts:Date.now(),likes:[],c:comm});$('t').value=''}catch(e){alert('No se pudo publicar. Puede que tu cuenta solo tenga permiso de lectura.')}};
+$('cc').onclick=async function(){var v=$('cn').value.trim();if(!v||!db)return;
+try{await db.collection('communities').add({name:v,by:me,ts:Date.now()});$('cn').value=''}catch(e){alert('No se pudo crear la comunidad.')}};
+async function start(){
+try{db=await claude.use('db');user=await claude.use('user');assets=await claude.use('assets')}catch(e){}
+if(!db||!user){$('msg').textContent='Abre esta página con tu sesión de Claude iniciada para usar las comunidades. Música y juegos funcionan igual.';return}
+me=await user.id();drawGames();
+try{if(user.canEdit())$('dccfg').style.display='block'}catch(e){}
+db.doc('settings/discord').onSnapshot(function(sn){dcDraw(sn.exists?sn.data():null)},function(){});
+db.collection('data/users/'+me+'/spotify').orderBy('ts','asc').onSnapshot(function(s){splist=s.docs.map(function(d){return{k:d.data().k,id:d.data().id,did:d.id}});spDraw()},function(){});
+/* Portadas locales: se cargan desde /imagenes para GitHub Pages. */
+db.collection('communities').orderBy('ts','asc').limit(100).onSnapshot(function(s){comms=s.docs.map(function(d){return{id:d.id,name:String(d.data().name||'')}});clist();feed()},function(){});
+db.collection('posts').orderBy('ts','desc').limit(100).onSnapshot(function(s){postsSnap=s;feed()},function(){$('msg').textContent='No se pudo leer la base de datos.'})}
+function dcDraw(cfg){var f=$('dcf'),ok=cfg&&/^\d{5,25}$/.test(String(cfg.s||''));
+if(!ok){f.style.display='none';f.src='about:blank';$('dcn').textContent='Aún no hay un servidor de Discord conectado a Nexo.';return}
+var hasC=/^\d{5,25}$/.test(String(cfg.c||''));
+f.src=hasC?'https://e.widgetbot.io/channels/'+cfg.s+'/'+cfg.c:'https://discord.com/widget?id='+cfg.s+'&theme=dark';
+f.style.display='block';$('dcn').textContent=hasC?'Chat del servidor':'Widget del servidor'}
+$('dcb').onclick=function(){var v={s:$('dcs').value.trim(),c:$('dcc').value.trim()};
+if(!/^\d{5,25}$/.test(v.s)){alert('El ID del servidor son solo números.');return}
+if(db)db.doc('settings/discord').set(v).catch(function(){alert('No se pudo guardar.')});else dcDraw(v)};
+/* Spotify en la barra */
+var splist=[];
+function spParse(u){u=String(u).trim();
+if(/youtu/.test(u)){var yl=u.match(/[?&]list=([A-Za-z0-9_-]+)/),yv=u.match(/[?&]v=([A-Za-z0-9_-]{11})/)||u.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+if(/\/playlist\?/.test(u)&&yl)return{k:'ytl',id:yl[1]};if(yv)return{k:'yt',id:yv[1]};if(yl)return{k:'ytl',id:yl[1]};return null}
+var m=u.match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(track|album|playlist|artist|episode|show)\/([A-Za-z0-9]+)/)||u.match(/^spotify:(track|album|playlist|artist|episode|show):([A-Za-z0-9]+)$/);return m?{k:m[1],id:m[2]}:null}
+function spDraw(){var l=$('splist');l.textContent='';
+if(!splist.length){var e=document.createElement('div');e.className='meta';e.textContent='Aún no has agregado nada. Pega un enlace de Spotify, YouTube o YT Music.';l.appendChild(e);return}
+splist.forEach(function(it){var w=document.createElement('div');w.style.marginBottom='10px';
+var f=document.createElement('iframe');f.className='emb';var isy=it.k==='yt'||it.k==='ytl';f.height=isy?'315':(it.k==='track'||it.k==='episode')?'152':'352';f.loading='lazy';f.allow=AL;f.title=isy?'YouTube':'Spotify';f.src=it.k==='yt'?'https://www.youtube.com/embed/'+it.id:it.k==='ytl'?'https://www.youtube.com/embed/videoseries?list='+it.id:emb(it.k,it.id);
+var x=document.createElement('button');x.className='g';x.textContent='Quitar';x.onclick=function(){spDel(it)};
+w.appendChild(f);w.appendChild(x);l.appendChild(w)})}
+function spDel(it){if(db&&me&&it.did)db.doc('data/users/'+me+'/spotify/'+it.did).delete().catch(function(){});else{splist=splist.filter(function(x){return x!==it});spDraw()}}
+$('spa').onclick=function(){var p=spParse($('spu').value);if(!p){alert('Ese no parece un enlace válido de Spotify, YouTube o YT Music.');return}
+if(db&&me)db.collection('data/users/'+me+'/spotify').add({k:p.k,id:p.id,ts:Date.now()}).catch(function(){alert('No se pudo guardar.')});
+else{splist.push(p);spDraw()}$('spu').value=''};
+$('sps').onclick=function(){var q=$('spq').value.trim();window.open(q?'https://open.spotify.com/search/'+encodeURIComponent(q):'https://open.spotify.com/','_blank','noopener')};
+$('spq').onkeydown=function(e){if(e.key==='Enter')$('sps').click()};
+$('yts').onclick=function(){var q=$('spq').value.trim();window.open('https://music.youtube.com/'+(q?'search?q='+encodeURIComponent(q):''),'_blank','noopener')};
+$('ytl').onclick=function(){window.open('https://accounts.google.com/','_blank','noopener')};
+$('spl').onclick=function(){window.open('https://accounts.spotify.com/login','_blank','noopener')};
+$('spw').onclick=function(){window.open('https://open.spotify.com/','_blank','noopener')};
+$('spb').onclick=function(){$('spo').classList.add('on')};
+$('spx').onclick=function(){$('spo').classList.remove('on')};
+$('spo').onclick=function(e){if(e.target===$('spo'))$('spo').classList.remove('on')};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')$('spo').classList.remove('on')});
+spDraw();dcDraw(null);
+ui();clist();drawGames();loadMusic();
+if(window.claude&&claude.use)start();else $('msg').textContent='Esta demo necesita abrirse dentro de Claude.';
+})();
+</script>
+</body>
+</html>
